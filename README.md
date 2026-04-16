@@ -1,117 +1,38 @@
-## API Gateway Microservice
+## Authentication Microservice
 
-### 📌 Overview
+* The authentication microservice is responsible for creating users.
+* A user that creates an account automatically becomes a buyer in the application.
+* When a user successfully creates an account, an event is published from the `authentication service` to the `users service` so as to add buyer data to `mongodb`.
+* Server side errors from the authentication microservice is sent to `elasticsearch` and can be viewed on `kibana`.
+* Authentication service uses these tools as the main tools
+  * `Your shared library`
+  * `NodeJS`
+  * `Express`
+  * `Typescript`
+  * `Rabbitmq`
+  * `Elasticsearch`
+  * `MySQL database`
+  * `Sequelize`
+  * `Json web token`
+  * `Faker to create seed data`
+* There are other packages that are used.
+* You can update the version of `NodeJS` used inside the `Dockerfile` and `Dockerfile.dev`.
+* Make sure you already have your own shared library published.
+* Copy the `.npmrc` file from your shared library folder and replace `${NPM_TOKEN}` with the actual `personal access token` you created.
+* Once you have your `.npmrc` and before you run `npm install` command, replace all occurrences of `@rayeeskha/jobber-shared` with your own shared library.
+* After replacing all occurrences of `@rayeeskha/jobber-shared`, you can then run `npm install` command.
+* Copy contents of `.env.dev` to `.env` file
+  * Create an account on `https://cloudinary.com`
+  * Get your `cloud name`, `cloud secret` and `cloud api key` and add to `.env`
+  * You can generate a new `GATEWAY_JWT_TOKEN` and `JWT_TOKEN`
+    * Just note that whatever you generate, that is what you will need to use in all the microservices that require those variables.
+* You can start the service with `npm run dev`.
 
-The API Gateway Microservice is responsible for handling all incoming requests from the frontend and routing them to appropriate backend services. It acts as a central entry point in the microservices architecture.
-
----
-
-### ⚙️ Responsibilities
-
-- Handles all client requests before reaching other microservices
-- Implements **Request/Response communication pattern**
-- Performs **request validation**
-- Manages authentication using **JSON Web Token (JWT)**
-- Adds JWT to cookie sessions and validates incoming tokens
-- Aggregates and forwards client-side errors from downstream services
-- Sends server-side errors to Elasticsearch for logging and monitoring
-
----
-
-### 📊 Logging & Monitoring
-
-- Server-side errors are logged in **Elasticsearch**
-- Logs can be visualized and monitored using **Kibana**
-
----
-
-### 🧰 Tech Stack
-
-- Node.js
-- Express.js
-- TypeScript
-- Axios
-- Redis
-- Elasticsearch
-- JSON Web Token (JWT)
-- Socket.IO
-- Socket.IO Client
-- Shared Library (Custom NPM Package)
-
----
-
-### 🗄️ Database Management
-
-- This project uses **TablePlus** as a database GUI tool
-- It helps in:
-  - Managing databases visually
-  - Running SQL queries
-  - Debugging and inspecting data
-
-- You can also use alternatives like phpMyAdmin , DBeaver or workbench
-
----
-
-### 📦 Setup Instructions
-
-1. **Shared Library**
-   - Ensure your shared library is published
-   - Replace all occurrences of `@rayeeskha/jobber-shared` with your own package
-
-2. **NPM Configuration**
-   - Copy `.npmrc` file
-   - Replace `${NPM_TOKEN}` with your personal access token
-
-3. **Environment Variables**
-   - Copy `.env.dev` → `.env`
-   - Update:
-     - `DATABASE_HOST` → your local IP
-     - `GATEWAY_JWT_TOKEN` and `JWT_TOKEN` → generate secure tokens
-
-4. **Install Dependencies**
-
-   ```bash
-   npm install
-   ```
-
-5. **Run Service**
-
-   ```bash
-   npm run dev
-   ```
-
----
-
-### 🐳 Docker Setup
-
-1. Build Image:
-
-   ```bash
-   docker build -t <your-dockerhub-username>/jobber-gateway .
-   ```
-
-2. Tag Image:
-
-   ```bash
-   docker tag <your-dockerhub-username>/jobber-gateway <your-dockerhub-username>/jobber-gateway:stable
-   ```
-
-3. Push to Docker Hub:
-
-   ```bash
-   docker push <your-dockerhub-username>/jobber-gateway:stable
-   ```
-
----
-
-### 💡 Notes
-
-- Ensure all microservices use the same JWT secret keys
-- Update Node.js version in `Dockerfile` if required
-- Maintain consistency across environments (dev, staging, production)
-
----
-
-### 🚀 Summary
-
-This API Gateway serves as the backbone of the microservices architecture, ensuring secure communication, centralized error handling, and efficient request routing across services.
+### Create docker images
+* You can create your own docker image from this microservice.
+* Create an account on `hub.docker.com` or login if you already have one.
+* Make sure to login on your terminal as well.
+* Steps to build and push your image to docker hub
+  * `docker build -t <your-dockerhub-username>/jobber-auth .`
+  * `docker tag <your-dockerhub-username>/jobber-auth <your-dockerhub-username>/jobber-auth:stable`
+  * `docker push <your-dockerhub-username>/jobber-auth:stable`
