@@ -46,6 +46,7 @@ export async function createAuthUser(
     ]) as IAuthDocument;
     return userData;
   } catch (error) {
+    console.log(error, 'createAuthUser')
     log.error(error);
   }
 }

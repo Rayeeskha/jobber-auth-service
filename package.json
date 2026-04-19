@@ -19,7 +19,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^9.3.4",
+    "@elastic/elasticsearch": "^8.10.0",
+    "@faker-js/faker": "^10.4.0",
     "@rayeeskha/jobber-shared": "^0.3.11",
     "amqplib": "^1.0.3",
     "bcryptjs": "^3.0.3",
@@ -39,6 +40,7 @@
     "sequelize": "^6.37.8",
     "typescript": "^6.0.2",
     "typescript-transform-paths": "^3.5.6",
+    "unique-username-generator": "^1.5.1",
     "uuid": "^8.3.2",
     "winston": "^3.19.0"
   },
