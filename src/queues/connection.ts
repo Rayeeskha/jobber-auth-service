@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 
 const log: Logger = winstonLogger(
   `${config.ELASTIC_SEARCH_URL}`,
-  'authQueueConnection',
+  'gigQueueConnection',
   'debug',
 );
 
