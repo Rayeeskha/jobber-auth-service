@@ -1,14 +1,33 @@
-# 🔐 Authentication Microservice Service
+# 🔐 Authentication Service
 
-A scalable **Authentication Microservice** built with **Node.js**, responsible for user registration, authentication, authorization, and event-driven communication within the Jobber microservices ecosystem.
+A production-ready **Authentication Microservice** built with **Node.js, TypeScript, RabbitMQ, MySQL, Sequelize, and Elasticsearch**, responsible for user registration, authentication, authorization, and identity management within a distributed microservices architecture.
+
+The service acts as the central authentication layer of the platform, providing secure user onboarding, JWT-based authentication, event-driven communication, and centralized monitoring.
 
 ---
 
-## 🚀 Overview
+## 🚀 Project Overview
 
-The Authentication Service manages user accounts and authentication workflows. When a new user registers, the service creates the account and automatically publishes an event to the Users Service to create the corresponding buyer profile.
+The Authentication Service is responsible for managing user identities and access control across the platform.
 
-The service follows an **event-driven architecture** using RabbitMQ and provides centralized error logging through Elasticsearch and Kibana.
+When a new user registers, the service validates the request, securely stores user credentials, generates authentication tokens, and publishes an event to RabbitMQ. Downstream services consume these events to create associated user profiles and initialize related resources.
+
+The service follows modern **Microservices** and **Event-Driven Architecture** principles, ensuring scalability, maintainability, and fault tolerance.
+
+---
+
+## 🎯 Business Responsibilities
+
+The Authentication Service handles:
+
+- User registration and onboarding
+- User authentication and login
+- JWT token generation and validation
+- Identity management
+- Secure credential storage
+- Event publishing for newly created users
+- Authorization support for protected resources
+- Centralized authentication across microservices
 
 ---
 
@@ -16,72 +35,128 @@ The service follows an **event-driven architecture** using RabbitMQ and provides
 
 ### 👤 User Registration & Authentication
 
-- User account creation and management
-- Secure authentication using JWT
+- Secure account creation
+- User login and authentication
 - Password hashing and validation
-- Session and token management
+- Session management
+- JWT token generation
+
+### 🔐 Authorization & Security
+
+- Route-level protection
+- JWT verification middleware
+- Authentication guards
+- Secure token handling
+- Input validation and sanitization
 
 ### 📨 Event-Driven Communication
 
-- Publishes events to RabbitMQ after successful user registration
-- Automatically creates buyer records in the Users Service
-- Decoupled communication between microservices
+- RabbitMQ-based event publishing
+- User creation events
+- Decoupled service communication
+- Reliable message delivery
 
 ### 🗄️ Database Management
 
-- MySQL database integration
-- ORM support using Sequelize
-- Database migrations and model management
+- MySQL integration
+- Sequelize ORM
+- Database migrations
+- Model associations and relationships
 
 ### 📊 Logging & Monitoring
 
-- Application and error logs stored in Elasticsearch
-- Log monitoring and visualization through Kibana
-- Centralized error tracking across services
+- Elasticsearch integration
+- Centralized error logging
+- Application monitoring
+- Operational visibility through Kibana
 
-### 🌱 Seed Data Generation
+### 🌱 Development & Testing
 
-- Faker integration for generating test and seed data
-- Useful for development and testing environments
-
----
-
-## 🏗️ Tech Stack
-
-- Node.js
-- Express.js
-- TypeScript
-- RabbitMQ
-- Elasticsearch
-- Kibana
-- MySQL
-- Sequelize ORM
-- JSON Web Token (JWT)
-- Faker
-- Docker
+- Faker-powered seed data generation
+- Local development support
+- Dockerized environment
 
 ---
 
-## 🔄 Service Workflow
+## 🏛️ Architecture Highlights
 
-1. User submits registration request
-2. Authentication Service validates user data
-3. User account is created in MySQL
-4. JWT token is generated
-5. Registration event is published to RabbitMQ
-6. Users Service consumes the event
-7. Buyer profile is created in MongoDB
-8. Logs are stored in Elasticsearch
-9. Logs are visualized through Kibana
+This service implements several modern backend engineering patterns:
+
+- Event-Driven Architecture
+- JWT-Based Authentication
+- Service Decoupling via RabbitMQ
+- Centralized Logging
+- ORM-Based Database Access
+- Dockerized Deployments
+- Scalable Microservices Design
+
+The Authentication Service serves as the **source of truth for user identity** throughout the platform.
 
 ---
 
-## 📦 Setup Instructions
+## 🔄 Authentication Workflow
 
-### 1️⃣ Clone the Repository
+```text
+Client Application
+        │
+        ▼
+Authentication Service
+        │
+        ├── Validate User Data
+        │
+        ├── Store User in MySQL
+        │
+        ├── Generate JWT Token
+        │
+        ├── Publish Event to RabbitMQ
+        │
+        ▼
+Users Service
+        │
+        ▼
+Create Buyer Profile
+
+Logs → Elasticsearch → Kibana
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Technology    | Purpose                    |
+| ------------- | -------------------------- |
+| Node.js       | Backend Runtime            |
+| Express.js    | Web Framework              |
+| TypeScript    | Type Safety                |
+| RabbitMQ      | Event Messaging            |
+| MySQL         | Relational Database        |
+| Sequelize     | ORM                        |
+| JWT           | Authentication             |
+| Elasticsearch | Log Storage                |
+| Kibana        | Monitoring & Visualization |
+| Faker         | Seed Data Generation       |
+| Docker        | Containerization           |
+
+---
+
+## 📊 Infrastructure Services
+
+| Service             | URL                    | Purpose                 |
+| ------------------- | ---------------------- | ----------------------- |
+| RabbitMQ Management | http://localhost:15672 | Queue Monitoring        |
+| Elasticsearch       | http://localhost:9200  | Log Storage & Search    |
+| Kibana              | http://localhost:5601  | Monitoring Dashboard    |
+| MySQL               | localhost:3306         | Authentication Database |
+| Cloudinary          | https://cloudinary.com | Media Storage           |
+
+---
+
+## 📦 Local Development Setup
+
+### 1️⃣ Clone Repository
 
 ```bash
-git clone <your-repository-url>
+git clone <repository-url>
 cd 3-auth-service
 ```
 
@@ -89,21 +164,21 @@ cd 3-auth-service
 
 ### 2️⃣ Configure Shared Library
 
-Ensure your shared library is already published.
+Ensure your shared library package is already published.
 
-Copy the `.npmrc` file from your shared library project and update:
+Copy the `.npmrc` file from your shared library project and configure:
 
 ```ini
 //npm.pkg.github.com/:_authToken=<YOUR_PERSONAL_ACCESS_TOKEN>
 ```
 
-Replace all references of:
+If required, replace:
 
 ```text
 @rayeeskha/jobber-shared
 ```
 
-with your own shared library package name if applicable.
+with your own shared library package name.
 
 ---
 
@@ -129,9 +204,9 @@ to:
 .env
 ```
 
-Configure the required environment variables.
+---
 
-#### Cloudinary Configuration
+### Cloudinary Configuration
 
 Create an account at:
 
@@ -139,7 +214,7 @@ Create an account at:
 https://cloudinary.com
 ```
 
-Add the following values to your `.env` file:
+Add the following values:
 
 ```env
 CLOUD_NAME=
@@ -147,7 +222,9 @@ CLOUD_API_KEY=
 CLOUD_API_SECRET=
 ```
 
-#### JWT Configuration
+---
+
+### JWT Configuration
 
 Generate secure values for:
 
@@ -156,11 +233,11 @@ JWT_TOKEN=
 GATEWAY_JWT_TOKEN=
 ```
 
-> Ensure the same JWT values are used across all services that require authentication.
+> The same JWT secrets must be shared across services that require authentication.
 
 ---
 
-### 5️⃣ Start the Service
+### 5️⃣ Run the Service
 
 ```bash
 npm run dev
@@ -169,8 +246,6 @@ npm run dev
 ---
 
 ## ⚙️ Environment Variables
-
-Example configuration:
 
 ```env
 PORT=4002
@@ -197,85 +272,6 @@ CLOUD_API_SECRET=
 
 ---
 
-## 🐳 Push Docker Image to Docker Hub
-
-This section explains how to build, tag, and publish the Authentication Service Docker image to Docker Hub.
-
----
-
-### 📋 Prerequisites
-
-Before proceeding, ensure that:
-
-- Docker Desktop is installed and running
-- You have access to Docker Hub
-- A valid GitHub Packages `NPM_TOKEN` is available
-- Docker Hub login credentials are available
-
----
-
-### 🔐 Step 1: Login to Docker Hub
-
-```bash
-docker login
-```
-
----
-
-### 🏗️ Step 2: Build Docker Image
-
-```bash
-docker build --build-arg NPM_TOKEN=<YOUR_GITHUB_TOKEN> -t rayeeskhandev/jobber-auth .
-```
-
-Example:
-
-```bash
-docker build --build-arg NPM_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxx -t rayeeskhandev/jobber-auth .
-```
-
----
-
-### 🏷️ Step 3: Tag Docker Image
-
-```bash
-docker tag rayeeskhandev/jobber-auth rayeeskhandev/jobber-auth:stable
-```
-
-Verify the image:
-
-```bash
-docker images
-```
-
----
-
-### 🚀 Step 4: Push Docker Image
-
-```bash
-docker push rayeeskhandev/jobber-auth:stable
-```
-
----
-
-### ⚡ Quick Commands
-
-```bash
-# Login
-docker login
-
-# Build Image
-docker build --build-arg NPM_TOKEN=<YOUR_GITHUB_TOKEN> -t rayeeskhandev/jobber-auth .
-
-# Tag Image
-docker tag rayeeskhandev/jobber-auth rayeeskhandev/jobber-auth:stable
-
-# Push Image
-docker push rayeeskhandev/jobber-auth:stable
-```
-
----
-
 ## 📁 Project Structure
 
 ```text
@@ -287,30 +283,105 @@ src/
 ├── database/
 ├── seeds/
 ├── helpers/
+├── middleware/
 ├── app.ts
 └── server.ts
 ```
 
 ---
 
-## 📊 Monitoring Services
+## 🔒 Security Features
 
-| Service             | URL                    | Description          |
-| ------------------- | ---------------------- | -------------------- |
-| RabbitMQ Management | http://localhost:15672 | Queue Monitoring     |
-| Elasticsearch       | http://localhost:9200  | Log Storage & Search |
-| Kibana              | http://localhost:5601  | Log Visualization    |
-| Cloudinary          | https://cloudinary.com | Image Storage        |
+- JWT-based authentication
+- Password hashing and secure credential storage
+- Request validation
+- Protected routes and authorization checks
+- Secure token generation and verification
+- Centralized authentication management
 
 ---
 
-## 🧠 Key Highlights
+## 📈 Monitoring & Observability
 
-- JWT-based authentication and authorization
-- Event-driven architecture with RabbitMQ
-- MySQL database integration using Sequelize
-- Centralized logging with Elasticsearch
-- Real-time monitoring through Kibana
-- Cloudinary image management
-- Dockerized deployment
-- Scalable microservice architecture
+The service provides centralized monitoring using Elasticsearch and Kibana.
+
+Features include:
+
+- Application log aggregation
+- Error monitoring
+- Operational visibility
+- Searchable logs
+- Production troubleshooting support
+
+---
+
+## 🐳 Docker Deployment
+
+### Login to Docker Hub
+
+```bash
+docker login
+```
+
+### Build Docker Image
+
+```bash
+docker build --build-arg NPM_TOKEN=<YOUR_GITHUB_TOKEN> -t rayeeskhandev/jobber-auth .
+```
+
+### Tag Docker Image
+
+```bash
+docker tag rayeeskhandev/jobber-auth rayeeskhandev/jobber-auth:stable
+```
+
+### Push Docker Image
+
+```bash
+docker push rayeeskhandev/jobber-auth:stable
+```
+
+### Quick Commands
+
+```bash
+docker login
+
+docker build --build-arg NPM_TOKEN=<YOUR_GITHUB_TOKEN> -t rayeeskhandev/jobber-auth .
+
+docker tag rayeeskhandev/jobber-auth rayeeskhandev/jobber-auth:stable
+
+docker push rayeeskhandev/jobber-auth:stable
+```
+
+---
+
+## 🚀 Engineering Highlights
+
+- Designed and implemented a scalable Authentication Microservice
+- Built event-driven communication using RabbitMQ
+- Implemented JWT-based authentication and authorization
+- Integrated MySQL using Sequelize ORM
+- Established centralized logging with Elasticsearch
+- Built monitoring capabilities using Kibana
+- Dockerized the service for consistent deployments
+- Developed using TypeScript for maintainability and type safety
+- Followed microservices architecture best practices
+
+---
+
+## 👨‍💻 Author
+
+**Rayees Khan**
+
+Backend Developer specializing in:
+
+- Node.js
+- TypeScript
+- Microservices Architecture
+- RabbitMQ
+- Docker
+- Elasticsearch
+- Kibana
+- AWS
+- REST APIs
+- System Design
