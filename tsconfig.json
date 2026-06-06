@@ -10,8 +10,10 @@
     // "moduleResolution": "bundler",
     "types": ["node", "jest"],    // ADD THIS LINE
     "noEmitOnError": true,
+    // "outDir": "build",
+    // "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "build",
-    "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
     "target": "es2021",
